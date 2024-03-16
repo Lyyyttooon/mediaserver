@@ -32,15 +32,15 @@ func (c *Conn) Get() {
 
 func (c *Conn) read() {
 	for {
-		line, _, err := c.readBuffer.ReadLine()
+		line, isPrefix, err := c.readBuffer.ReadLine()
 		if err != nil {
 			fmt.Println(err.Error())
 			break
 		}
-		fmt.Println(string(line))
-		if len(line) == 0 {
+		if isPrefix || len(line) == 0 {
 			break
 		}
+		fmt.Println(string(line))
 	}
 
 	msgBody := make([]byte, 1024)

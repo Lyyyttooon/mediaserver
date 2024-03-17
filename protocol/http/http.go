@@ -2,6 +2,7 @@ package http
 
 import (
 	"bufio"
+	"crypto/tls"
 	"fmt"
 	"net"
 
@@ -57,9 +58,20 @@ func New(uri string) (*Conn, error) {
 		return nil, err
 	}
 
-	conn, err := net.Dial("tcp", url.Host)
-	if err != nil {
-		return nil, err
+	var conn net.Conn
+	if url.Scheme == "https" {
+		conf := &tls.Config{
+			InsecureSkipVerify: true,
+		}
+		conn, err = tls.Dial("tcp", url.Host, conf)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		conn, err = net.Dial("tcp", url.Host)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &Conn{

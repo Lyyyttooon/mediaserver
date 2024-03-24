@@ -3,8 +3,11 @@ package utils
 import (
 	"fmt"
 	"net/url"
+)
 
-	"github.com/Lyyyttooon/mediaserver/protocol/common"
+const (
+	HttpDefaultPort  = 80
+	HttpsDefaultPort = 443
 )
 
 func ParseURI(uri string) (*url.URL, error) {
@@ -16,9 +19,9 @@ func ParseURI(uri string) (*url.URL, error) {
 	if uriParsed.Port() == "" {
 		switch uriParsed.Scheme {
 		case "http":
-			uriParsed.Host += fmt.Sprintf(":%d", common.HttpDefaultPort)
+			uriParsed.Host += fmt.Sprintf(":%d", HttpDefaultPort)
 		case "https":
-			uriParsed.Host += fmt.Sprintf(":%d", common.HttpsDefaultPort)
+			uriParsed.Host += fmt.Sprintf(":%d", HttpsDefaultPort)
 		}
 	}
 
